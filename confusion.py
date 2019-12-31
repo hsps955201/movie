@@ -12,6 +12,12 @@ def plot_confusion_matrix(y_true, y_pred, classes,
                           normalize=False,
                           title=None,
                           cmap=plt.cm.Blues):
+
+    # print("True:")
+    # print(y_true)
+    # print("")
+    # print("Predict:")
+    # print(y_pred)
     """
     This function prints and plots the confusion matrix.
     Normalization can be applied by setting `normalize=True`.
@@ -26,7 +32,7 @@ def plot_confusion_matrix(y_true, y_pred, classes,
     cm = confusion_matrix(y_true, y_pred)
     # Only use the labels that appear in the data
 #     classes = classes[unique_labels(y_true, y_pred)]
-    classes = ['0', '1', '2', '3']
+    # classes = ['0', '1', '2', '3']
     if normalize:
         cm = cm.astype('float') / cm.sum(axis=1)[:, np.newaxis]
         print("Normalized confusion matrix")

@@ -196,7 +196,7 @@ if __name__ == "__main__":
     """        
     ml:"random_forest", "decision_tree", "xgboost"
     """
-    ml(class_num=2, epochs=200, method="xgboost", source_data=source_data, twitter_source=twitter_source, 
+    ml(class_num=4, epochs=200, method="xgboost", source_data=source_data, twitter_source=twitter_source, 
        google_source=google_source, ig_source=ig_source, judge=False, nan=False)
 
     """

@@ -29,11 +29,11 @@ def data_preprocess(source_data, nan=True):
         if source_data["累計銷售金額"][i] < source_data["累計銷售金額"].describe()['25%']:        
             revised_y[i]=0
         elif source_data["累計銷售金額"].describe()['25%'] < source_data["累計銷售金額"][i] < source_data["累計銷售金額"].describe()['50%']:        
-            revised_y[i]=0
+            revised_y[i]=1
         elif source_data["累計銷售金額"].describe()['50%'] < source_data["累計銷售金額"][i] < source_data["累計銷售金額"].describe()['75%']:
-            revised_y[i]=1
+            revised_y[i]=2
         elif source_data["累計銷售金額"][i] > source_data["累計銷售金額"].describe()['75%']:
-            revised_y[i]=1
+            revised_y[i]=3
     
     """
     watch preprocess
@@ -134,12 +134,16 @@ def data_preprocess(source_data, nan=True):
     return input_x, revised_y
 
 def main(class_num, epochs, batch_size, optimizer, loss, method, kind, judge, nan):
-    if kind=="month":
-        train_source="./new/month_train.csv"
-        test_source="./new/month_test.csv"
+    if kind=="seven":
+        train_source="./new/new_seven_train_data.csv"
+        test_source="./new/new_seven_test_data.csv"
+    elif kind=="eight":
+        train_source="./new/new_eight_train_data.csv"
+        test_source="./new/new_eight_test_data.csv"
     else:
-        train_source="./new/week_train.csv"
-        test_source="./new/week_test.csv"
+        train_source="./new/new_nine_train_data.csv"
+        test_source="./new/new_nine_test_data.csv"
+
 
     train_data=pd.read_csv(train_source)
     train_data.reset_index(drop=True)
@@ -162,6 +166,7 @@ def main(class_num, epochs, batch_size, optimizer, loss, method, kind, judge, na
     elif method=="xgboost":                            
         y_test, ans_best=xgboost(input_x, revised_y, X_train, y_train, X_test, y_test, class_num=class_num,
         num=100, judge=judge)
+        print(y_test)
         plot(class_num, y_test, ans_best)
     else:
         ohe = OneHotEncoder()
@@ -176,6 +181,8 @@ def main(class_num, epochs, batch_size, optimizer, loss, method, kind, judge, na
 def plot(class_num, y_test, ans_best):
     if class_num==2:
         classes = ['0', '1']
+    elif class_num==3:
+        classes = ['0', '1', '2']
     elif class_num==4:
         classes = ['0', '1', '2', '3']
 
@@ -188,4 +195,4 @@ def plot(class_num, y_test, ans_best):
 
 if __name__ == "__main__":
 
-    main(class_num=2, epochs=200, batch_size=32, optimizer="adam", loss="binary", method="nn", kind="month", judge=True, nan=False)
+    main(class_num=4, epochs=200, batch_size=32, optimizer="adam", loss="binary", method="xgboost", kind="eight", judge=True, nan=False)

@@ -30,7 +30,7 @@ def random_forest(input_x, revised_y, X_train, y_train, X_test, y_test, judge):
         print(check_list)
         X_train=np.delete(X_train, -1, axis=1)
         X_test=np.delete(X_test, -1, axis=1)
-        
+
     rf = RandomForestClassifier()
     rf.fit(X_train, y_train)
     RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
@@ -114,6 +114,15 @@ def xgboost(input_x, revised_y, X_train, y_train, X_test, y_test, class_num, num
         y_train=y_train
         X_test=X_test 
         y_test=y_test
+        print(X_test.shape)
+        check_list=[]
+        for i in range(len(X_test)):
+            # print(X_test[i][input_x.shape[1]-1])
+            check_list.append(X_test[i][X_test.shape[1]-1])
+        # check_list.sort()
+        # print(check_list)
+        X_train=np.delete(X_train, -1, axis=1)
+        X_test=np.delete(X_test, -1, axis=1)
     else:
         X_train, X_test, y_train, y_test = train_test_split(input_x, revised_y, test_size=0.3, random_state=42)
         print("labels")
@@ -121,8 +130,8 @@ def xgboost(input_x, revised_y, X_train, y_train, X_test, y_test, class_num, num
         for i in range(len(X_test)):
             # print(X_test[i][input_x.shape[1]-1])
             check_list.append(X_test[i][input_x.shape[1]-1])
-        check_list.sort()
-        print(check_list)
+        # check_list.sort()
+        # print(check_list)
         X_train=np.delete(X_train, -1, axis=1)
         X_test=np.delete(X_test, -1, axis=1)
         
@@ -135,6 +144,8 @@ def xgboost(input_x, revised_y, X_train, y_train, X_test, y_test, class_num, num
 
     acc_list=[0]
     number_list=[0]
+    # true_list=[0]
+    # predict_list=[0]
     ans_best=np.zeros(len(X_test))
     for j in range(num):    
         num_rounds = j
@@ -167,8 +178,27 @@ def xgboost(input_x, revised_y, X_train, y_train, X_test, y_test, class_num, num
         print("Epochs "+ str(j) + " " +"Accuracy: %.2f %% " % (100 * cnt1 / (cnt1 + cnt2)))
     print(number_list)
     print(acc_list)
-    # print(y_test)
+
+    # print("True:")
+    # print(y_te
+    # print("Predict:")
     # print(ans_best)
+    # print("")
+    # print(check_list)st)
+    # print("")
+    print("for check:")
+    print("")
+    for i in range(len(y_test)):
+        if y_test[i]!=ans_best[i]:
+            print("index:")
+            print(check_list[i])
+            print("True:")
+            print(y_test[i])
+            print("Predict:")
+            print(ans_best[i])
+            print("")
+
+
     return y_test, ans_best
     # # 显示重要特征
     # plot_importance(model)

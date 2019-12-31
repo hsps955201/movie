@@ -34,18 +34,18 @@ def data_preprocess(source_data, nan=True):
     google_actor_two=source_data["演員2搜尋"]
     google_writer=source_data["編劇1搜尋"]
 
-
-
+    print("judge:")
+    print(source_data["累計銷售金額"].describe()['50%'])
     revised_y=np.zeros(len(box))
     for i in range(len(source_data)):
         if source_data["累計銷售金額"][i] < source_data["累計銷售金額"].describe()['25%']:        
             revised_y[i]=0
         elif source_data["累計銷售金額"].describe()['25%'] < source_data["累計銷售金額"][i] < source_data["累計銷售金額"].describe()['50%']:        
-            revised_y[i]=0
+            revised_y[i]=1
         elif source_data["累計銷售金額"].describe()['50%'] < source_data["累計銷售金額"][i] < source_data["累計銷售金額"].describe()['75%']:
-            revised_y[i]=1
+            revised_y[i]=2
         elif source_data["累計銷售金額"][i] > source_data["累計銷售金額"].describe()['75%']:
-            revised_y[i]=1
+            revised_y[i]=3
     # print(revised_y)
 
     """
@@ -339,31 +339,38 @@ def data_preprocess(source_data, nan=True):
     #         dislike_ratio[i]=(dislike_ratio[i]-dislike_ratio_min)/(dislike_ratio_max-dislike_ratio_min)
     # print(dislike_ratio)
 
+    like_data=np.zeros(len(like))
+    for i in range(len(like)):
+        tmp=like[i]
+        if np.isnan(tmp)==True :
+            if nan==True:
+                tmp=np.nan
+            else:
+                tmp=0            
+        like_data[i]=tmp
+    like_data=preprocessing.scale(like_data)
 
+    dislike_data=np.zeros(len(like))
+    for i in range(len(like)):
+        tmp=dislike[i]
+        if np.isnan(tmp)==True :
+            if nan==True:
+                tmp=np.nan
+            else:
+                tmp=0            
+        dislike_data[i]=tmp
+    dislike_data=preprocessing.scale(dislike_data)
     """
     y:box
     x:watch, like_ratio, google_trend
     """
-
-    # from sklearn.preprocessing import PolynomialFeatures
-    # poly = PolynomialFeatures(3)
-    # # poly.fit_transform(X)
-
-    # # poly = PolynomialFeatures(interaction_only=True)
-    # new_data=poly.fit_transform(writer_data, director_data, actor_one_data, actor_two_data)
-    # print(new_data)
-
-    # input_x=np.stack((watch_data, like_ratio, dislike_ratio, like_audience_ratio, dislike_audience_ratio,
-    #                   variable, like_inverse, dislike_inverse, month,
-    #                   google_director_data, google_actor_one_data, google_actor_two_data, google_writer_data                                   
-
-    #                  ),axis=1)
-    
+   
     print(watch_data.shape)
     print(name_index.shape)
     input_x=np.stack((
                       watch_data, 
-                      like, dislike,
+                      like_ratio, dislike_ratio,
+                      like_data, dislike_data,
                       variable,
                       google_data,
                       like_inverse, dislike_inverse, 
@@ -375,7 +382,7 @@ def data_preprocess(source_data, nan=True):
 
                      ),axis=1)
     # print(name_index)
-    
+    print(revised_y)
     # print(input_x)
     # print(input_x.shape)
     return input_x, revised_y
