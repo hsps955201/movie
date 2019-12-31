@@ -153,10 +153,20 @@ def dl(source_data, twitter_source, google_source, ig_source, class_num, epochs,
         tmp_data=pie(num=11, source_data=source_data, all_option=True)
         final_data=combine(tmp_data, twitter_source, google_source, ig_source)
         input_x, revised_y=data_preprocess(final_data, nan=nan)
-        # print(input_x.shape)
         ohe = OneHotEncoder()
         revised_y = ohe.fit_transform(revised_y.reshape(-1, 1)).toarray()
         X_train, X_test, y_train, y_test = train_test_split(input_x, revised_y, test_size=0.3, random_state=42) 
+        
+        print("labels")
+        check_list=[]
+        for i in range(len(X_test)):
+            # print(X_test[i][input_x.shape[1]-1])
+            check_list.append(X_test[i][input_x.shape[1]-1])
+        check_list.sort()
+        print(check_list)
+        X_train=np.delete(X_train, -1, axis=1)
+        X_test=np.delete(X_test, -1, axis=1)
+        
         sc = StandardScaler()
         X_train = sc.fit_transform(X_train)
         X_test = sc.transform(X_test)

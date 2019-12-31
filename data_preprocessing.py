@@ -359,7 +359,9 @@ def data_preprocess(source_data, nan=True):
 
     #                  ),axis=1)
     
-    input_x=np.stack((name_index,
+    print(watch_data.shape)
+    print(name_index.shape)
+    input_x=np.stack((
                       watch_data, 
                       like, dislike,
                       variable,
@@ -368,10 +370,13 @@ def data_preprocess(source_data, nan=True):
                       like_audience_ratio, dislike_audience_ratio,
                       ig_actor_one_data,
                       twitter_actor_one_data,
-                      google_actor_one_data              
+                      google_actor_one_data,
+                      name_index          # for check   
 
                      ),axis=1)
+    # print(name_index)
     
+    # print(input_x)
     # print(input_x.shape)
     return input_x, revised_y
 

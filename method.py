@@ -21,7 +21,16 @@ def random_forest(input_x, revised_y, X_train, y_train, X_test, y_test, judge):
         y_test=y_test
     else:
         X_train, X_test, y_train, y_test = train_test_split(input_x, revised_y, test_size=0.3, random_state=42)
-    
+        print("labels")
+        check_list=[]
+        for i in range(len(X_test)):
+            # print(X_test[i][input_x.shape[1]-1])
+            check_list.append(X_test[i][input_x.shape[1]-1])
+        check_list.sort()
+        print(check_list)
+        X_train=np.delete(X_train, -1, axis=1)
+        X_test=np.delete(X_test, -1, axis=1)
+        
     rf = RandomForestClassifier()
     rf.fit(X_train, y_train)
     RandomForestClassifier(bootstrap=True, class_weight=None, criterion='gini',
@@ -56,7 +65,16 @@ def decision_tree(input_x, revised_y, X_train, y_train, X_test, y_test, judge):
         y_test=y_test
     else:
         X_train, X_test, y_train, y_test = train_test_split(input_x, revised_y, test_size=0.3, random_state=42)
-    
+        print("labels")
+        check_list=[]
+        for i in range(len(X_test)):
+            # print(X_test[i][input_x.shape[1]-1])
+            check_list.append(X_test[i][input_x.shape[1]-1])
+        check_list.sort()
+        print(check_list)
+        X_train=np.delete(X_train, -1, axis=1)
+        X_test=np.delete(X_test, -1, axis=1)
+
     clf = DecisionTreeClassifier(random_state=0)
     clf.fit(X_train, y_train)
     y_pred = clf.predict(X_test)
@@ -99,8 +117,15 @@ def xgboost(input_x, revised_y, X_train, y_train, X_test, y_test, class_num, num
     else:
         X_train, X_test, y_train, y_test = train_test_split(input_x, revised_y, test_size=0.3, random_state=42)
         print("labels")
-        print(X_train)
-
+        check_list=[]
+        for i in range(len(X_test)):
+            # print(X_test[i][input_x.shape[1]-1])
+            check_list.append(X_test[i][input_x.shape[1]-1])
+        check_list.sort()
+        print(check_list)
+        X_train=np.delete(X_train, -1, axis=1)
+        X_test=np.delete(X_test, -1, axis=1)
+        
     from sklearn.preprocessing import StandardScaler
     sc = StandardScaler()
     X_train = sc.fit_transform(X_train)
